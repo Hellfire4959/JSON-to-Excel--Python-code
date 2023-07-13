@@ -1,0 +1,26 @@
+import os
+import json
+import pandas as pd
+
+# Folder path containing the JSON files
+folder_path = r'C:\Users\Hellfire\Downloads\json'
+
+# Initialize an empty DataFrame
+df = pd.DataFrame()
+
+# Iterate over the JSON files in the folder
+for file_name in os.listdir(folder_path):
+if file_name.endswith('.json'):
+file_path = os.path.join(folder_path, file_name)
+# Read the JSON file into a DataFrame, specifying the encoding
+with open(file_path, 'r', encoding='utf-8-sig') as json_file:
+# Parse the JSON data
+data = json.load(json_file)
+# Convert the JSON data to a DataFrame
+temp_df = pd.json_normalize(data)
+# Concatenate the DataFrame to the main DataFrame
+df = pd.concat([df, temp_df], ignore_index=True)
+
+# Save the DataFrame to an Excel file using the openpyxl engine
+output_file = r'C:\Users\Hellfire\Downloads\output.xlsx'
+df.to_excel(output_file, index=False, engine='openpyxl')
